@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ultimate Fun Restaurant Date & Challenge</title>
+<!-- Google Fonts & Icons -->
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Roboto&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+<!-- Animate.css for animations -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+<style>
+  :root {
+    --primary-color: #4CAF50;
+    --danger-color: #f44336;
+    --background-gradient: linear-gradient(135deg, #fbc2eb 0%, #a6c1ee 100%);
+  }
+
+  body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: var(--background-gradient);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    color: #222;
+    transition: background 0.5s;
+  }
+
+  body.dark-mode {
+    background: #222;
+    color: #eee;
+  }
+
+  /* Header styles */
+  h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 3em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+
+  /* Progress bar */
+  #progressContainer {
+    width: 100%;
+    max-width: 700px;
+    height: 10px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 5px;
+    margin-top: 20px;
+    overflow: hidden;
+  }
+  #progressBar {
+    height: 100%;
+    width: 0%;
+    background-color: var(--primary-color);
+    transition: width 0.5s;
+  }
+
+  /* Toggle switch styles */
+  .toggle-container {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+  }
+  .toggle-switch {
+    display: flex;
+    align-items: center;
+  }
+  .toggle-switch input {
+    display: none;
+  }
+  .switch-label {
+    background-color: #ccc;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-block;
+    height: 30px;
+    position: relative;
+    width: 60px;
+    transition: background-color 0.3s;
+  }
+  .switch-label::after {
+    content: "";
+    background: #fff;
+    border-radius: 50%;
+    bottom: 2px;
+    left: 2px;
+    height: 26px;
+    width: 26px;
+    position: absolute;
+    transition: 0.3s;
+  }
+  input:checked + .switch-label {
+    background-color: var(--primary-color);
+  }
+  input:checked + .switch-label::after {
+    transform: translateX(30px);
+  }
+
+  /* Buttons style */
+button {
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 1.2em;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  }
+.btn-yes {
+    background-color: var(--primary-color);
+    color: #fff;
+  }
+.btn-no {
+    background-color: var(--danger-color);
+    color: #fff;
+  }
+
+#question {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+  }
+
+#response {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 150px;
+  }
+
+#response img {
+    max-width: 150px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    margin-top: 10px;
+    transition: transform 0.3s;
+  }
+
+#nextSection, #funQuestions, #finalMessage, #feeBox, #surpriseBox, #miniGame, #shareSection {
+    display: none;
+    margin-top: 40px;
+    width: 90%;
+    max-width: 700px;
+    padding: 20px;
+    background: rgba(255,255,255,0.8);
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    animation: fadeIn 1s ease forwards;
+  }
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+#scheduleForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+#scheduleForm input, #scheduleForm select {
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    width: 80%;
+    max-width: 300px;
+    font-size: 1em;
+  }
+
+#funQuestions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+#funQuestions button {
+    padding: 10px 20px;
+    margin: 8px;
+    font-size: 1em;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background-color: #eee;
+    transition: background 0.3s, transform 0.2s;
+  }
+#funQuestions button:hover {
+    background-color: #ddd;
+    transform: scale(1.05);
+  }
+
+#finalMessage {
+    text-align: center;
+  }
+#finalMessage p {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+  }
+#shareSection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+#shareBtn {
+    margin-top: 15px;
+    padding: 12px 20px;
+    background-color: var(--primary-color);
+    color: #fff;
+    border-radius: 8px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border: none;
+  }
+#shareBtn:hover {
+    background-color: #45a049;
+  }
+
+#surpriseBox {
+    display: none;
+    text-align: center;
+    font-size: 1.7em;
+    margin-top: 20px;
+  }
+
+#miniGame {
+    display: none;
+    text-align: center;
+  }
+#miniGame p {
+    font-size: 1.4em;
+    margin-bottom: 10px;
+  }
+#miniGame button {
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: #fff;
+    transition: background 0.3s;
+  }
+#miniGame button:hover {
+    background-color: #45a049;
+  }
+
+#footer {
+    margin-top: 50px;
+    font-size: 1.2em;
+    text-align: center;
+    color: #555;
+  }
+
+#feeBox {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: rgba(0,0,0,0.1);
+    border-radius: 15px;
+    font-size: 1.2em;
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+<!-- Dark mode toggle -->
+<div class="toggle-container">
+  <div class="toggle-switch">
+    <input type="checkbox" id="modeSwitch" onchange="toggleDarkMode()" />
+    <label for="modeSwitch" class="switch-label" aria-label="Toggle dark mode"></label>
+  </div>
+</div>
+
+<h1>Would you like to go to the restaurant with me? <i class="fas fa-utensils"></i></h1>
+
+<!-- Progress bar -->
+<div id="progressContainer">
+  <div id="progressBar"></div>
+</div>
+
+<div id="question">
+  <button class="btn-yes" onclick="answerYes()">Yes <i class="fas fa-thumbs-up"></i></button>
+  <button class="btn-no" onclick="answerNo()">No <i class="fas fa-thumbs-down"></i></button>
+</div>
+
+<div id="response"></div>
+
+<!-- Next section for planning -->
+<div id="nextSection">
+  <h2>Let's plan the details</h2>
+  <form id="scheduleForm" onsubmit="return false;">
+    <label for="name">Your name:</label>
+    <input type="text" id="name" placeholder="Enter your name" required />
+    <label for="day">Select a day:</label>
+    <select id="day" required>
+      <option value="">--Choose a day--</option>
+      <option value="Monday">Monday</option>
+      <option value="Tuesday">Tuesday</option>
+      <option value="Wednesday">Wednesday</option>
+      <option value="Thursday">Thursday</option>
+      <option value="Friday">Friday</option>
+      <option value="Saturday">Saturday</option>
+      <option value="Sunday">Sunday</option>
+    </select>
+    <label for="time">Select a time:</label>
+    <input type="time" id="time" required />
+    <button type="button" onclick="startMiniGame()">Next <i class="fas fa-arrow-right"></i></button>
+  </form>
+</div>
+
+<!-- Mini Game: Trivia -->
+<div id="miniGame">
+  <h2>Trivia Time!</h2>
+  <p id="triviaQuestion"></p>
+  <div id="triviaOptions"></div>
+</div>
+
+<!-- Fun questions -->
+<div id="funQuestions">
+  <h2>Let's have some fun questions!</h2>
+  <p>What's your favorite color?</p>
+  <button onclick="answerFunQuestion('Color', 'Blue')">Blue</button>
+  <button onclick="answerFunQuestion('Color', 'Red')">Red</button>
+  <button onclick="answerFunQuestion('Color', 'Green')">Green</button>
+  <p>What's your favorite music?</p>
+  <button onclick="answerFunQuestion('Music', 'Pop')">Pop</button>
+  <button onclick="answerFunQuestion('Music', 'Rock')">Rock</button>
+  <button onclick="answerFunQuestion('Music', 'Jazz')">Jazz</button>
+  <p>Are you a morning person or night owl?</p>
+  <button onclick="answerFunQuestion('Personality', 'Morning')">Morning</button>
+  <button onclick="answerFunQuestion('Personality', 'Night')">Night</button>
+  <button onclick="finishFunQuestions()">Finish</button>
+</div>
+
+<!-- Final message -->
+<div id="finalMessage">
+  <p id="finalText"></p>
+  <img src="https://images.unsplash.com/photo-1551963831-b3b1ca40c98e" alt="Excited" style="width:100px; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.2);" />
+  <div id="shareSection">
+    <button id="shareBtn" onclick="shareResults()">Share Your Fun!</button>
+  </div>
+</div>
+
+<!-- Surprise element -->
+<div id="surpriseBox">
+  <p>🎉 Surprise! You're amazing! 🎉</p>
+</div>
+
+<!-- Fee message box -->
+<div id="feeBox">
+  <p>Small fee: Just a smile and your company! 😄</p>
+</div>
+
+<!-- Confetti Canvas -->
+<canvas id="confettiCanvas" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:9999;"></canvas>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+<script>
+  // Initialize variables
+  let currentStep = 0;
+  let funAnswers = {};
+  let triviaQuestions = [
+    {
+      question: "What is the capital of France?",
+      options: ["Paris", "London", "Berlin", "Rome"],
+      answer: "Paris"
+    },
+    {
+      question: "Which planet is known as the Red Planet?",
+      options: ["Mars", "Venus", "Jupiter", "Saturn"],
+      answer: "Mars"
+    },
+    {
+      question: "Who wrote 'Hamlet'?",
+      options: ["Shakespeare", "Hemingway", "Tolkien", "Dickens"],
+      answer: "Shakespeare"
+    }
+  ];
+  let currentTriviaIndex = 0;
+
+  const confetti = window.confetti;
+
+  // Toggle dark mode
+function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+  }
+
+  // Update progress bar
+function updateProgress(percent) {
+    document.getElementById('progressBar').style.width = percent + '%';
+  }
+
+  // Play sound effect
+function playSound(src) {
+    const sound = new Audio(src);
+    sound.play();
+  }
+
+  // Answer Yes
+function answerYes() {
+  currentStep++;
+  updateProgress(currentStep * 20);
+  document.getElementById('question').style.display = 'none';
+  const responseDiv = document.getElementById('response');
+  responseDiv.innerHTML = '<img src="https://images.unsplash.com/photo-1583337130420-de6f8f4b0b0f" class="animate__animated animate__zoomIn" style="width:150px; border-radius:15px; box-shadow:0 4px 20px rgba(0,0,0,0.2);" />';
+  responseDiv.innerHTML += '<p class="animate__animated animate__fadeIn" style="margin-top:10px; font-size:1.3em;">Hi ' + (document.getElementById("name").value || "there") + '! You said YES! 🎉</p>';
+  // Play celebration sound
+  playSound('https://www.myinstants.com/media/sounds/applause.mp3');
+  setTimeout(() => {
+    confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+  }, 500);
+  setTimeout(() => {
+    document.getElementById('nextSection').style.display = 'block';
+  }, 1500);
+}
+
+// Answer No
+function answerNo() {
+  currentStep++;
+  updateProgress(currentStep * 20);
+  document.getElementById('question').style.display = 'none';
+  document.getElementById('response').innerHTML = '<p class="animate__animated animate__shakeX" style="color:red; font-size:1.5em;">Oh no! Maybe next time! 🙁</p>';
+  playSound('https://www.myinstants.com/media/sounds/negative-beep.mp3');
+}
+
+// Proceed to Mini Game (Trivia)
+function startMiniGame() {
+  const name = document.getElementById('name').value.trim();
+  if (!name) { alert('Please enter your name.'); return; }
+  const day = document.getElementById('day').value;
+  const time = document.getElementById('time').value;
+  if (!day || !time) { alert('Select day and time!'); return; }
+  currentStep++;
+  updateProgress(currentStep * 20);
+  document.getElementById('nextSection').style.display = 'none';
+  setupTrivia();
+}
+
+// Setup trivia question
+function setupTrivia() {
+  if (currentTriviaIndex >= triviaQuestions.length) {
+    // No more questions
+    showFunQuestions();
+    return;
+  }
+  const q = triviaQuestions[currentTriviaIndex];
+  document.getElementById('triviaQuestion').textContent = q.question;
+  const optionsDiv = document.getElementById('triviaOptions');
+  optionsDiv.innerHTML = '';
+  q.options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.textContent = opt;
+    btn.onclick = () => checkTriviaAnswer(opt);
+    optionsDiv.appendChild(btn);
+  });
+  document.getElementById('miniGame').style.display = 'block';
+}
+
+// Check trivia answer
+function checkTriviaAnswer(selected) {
+  const correct = triviaQuestions[currentTriviaIndex].answer;
+  if (selected === correct) {
+    alert('Correct! Well done!');
+    playSound('https://www.myinstants.com/media/sounds/correct.mp3');
+    confetti({ particleCount: 200, spread: 100 });
+  } else {
+    alert('Oops! The correct answer was ' + correct);
+    playSound('https://www.myinstants.com/media/sounds/error.mp3');
+  }
+  currentTriviaIndex++;
+  setupTrivia();
+}
+
+// Show fun questions after trivia
+function showFunQuestions() {
+  currentStep++;
+  updateProgress(currentStep * 20);
+  document.getElementById('miniGame').style.display = 'none';
+  document.getElementById('funQuestions').style.display = 'block';
+}
+
+// Answer fun questions
+function answerFunQuestion(category, answer) {
+  funAnswers[category] = answer;
+  event.target.classList.add('animate__animated', 'animate__pulse');
+  setTimeout(() => {
+    event.target.classList.remove('animate__animated', 'animate__pulse');
+  }, 500);
+}
+
+// Finish fun questions
+function finishFunQuestions() {
+  currentStep++;
+  updateProgress(currentStep * 20);
+  document.getElementById('funQuestions').style.display = 'none';
+  const name = document.getElementById('name').value.trim();
+  document.getElementById('finalText').innerHTML = `Hi ${name}! You're fantastic!<br>Color: ${funAnswers['Color'] || 'N/A'}<br>Music: ${funAnswers['Music'] || 'N/A'}<br>Personality: ${funAnswers['Personality'] || 'N/A'}`;
+  document.getElementById('finalMessage').style.display = 'block';
+
+  // Show surprise
+  setTimeout(() => {
+    document.getElementById('surpriseBox').style.display = 'block';
+    confetti({ particleCount: 200, spread: 100 });
+    document.getElementById('surpriseBox').innerHTML = "<p>🎉 Surprise! You're an awesome person! 🎉</p>";
+  }, 2000);
+
+  // Show fee message
+  setTimeout(() => {
+    document.getElementById('feeBox').style.display = 'block';
+    // Show share button
+    document.getElementById('shareBtn').style.display = 'inline-block';
+  }, 2500);
+}
+
+// Share results
+function shareResults() {
+  const name = document.getElementById('name').value.trim();
+  const favColor = funAnswers['Color'] || 'N/A';
+  const favMusic = funAnswers['Music'] || 'N/A';
+  const personality = funAnswers['Personality'] || 'N/A';
+
+  const shareText = `Hey! I'm ${name}! I love ${favColor} and ${favMusic}. I'm a ${personality} person! Join me for a fun date!`;
+
+  if (navigator.share) {
+    navigator.share({
+      title: 'Fun Date Planning',
+      text: shareText,
+      url: window.location.href
+    }).then(() => {
+      alert('Thanks for sharing! 🎉');
+      playSound('https://www.myinstants.com/media/sounds/little-sound.mp3');
+    }).catch(console.error);
+  } else {
+    // fallback
+    prompt('Copy and share this:', shareText + ' ' + window.location.href);
+    playSound('https://www.myinstants.com/media/sounds/little-sound.mp3');
+  }
+}
+
+// Optional: background music
+const bgMusic = new Audio('https://www.bensound.com/bensound-music/bensound-funkyelement.mp3');
+bgMusic.loop = true;
+bgMusic.volume = 0.2;
+bgMusic.play();
+
+</script>
+</body>
+</html>
